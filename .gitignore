@@ -4,3 +4,4 @@ node_modules/
 .env
 coverage/
 localhostconnect.js
+client.js
