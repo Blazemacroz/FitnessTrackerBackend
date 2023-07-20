@@ -6,10 +6,10 @@ const { createUser } = require("./users.js")
 async function dropTables() {
   console.log("Dropping All Tables...")
   await client.query(`
-  DROP TABLE IF EXISTS users;
-  DROP TABLE IF EXISTS activities;
-  DROP TABLE IF EXISTS routines;
   DROP TABLE IF EXISTS routine_activities;
+  DROP TABLE IF EXISTS routines;
+  DROP TABLE IF EXISTS activities;
+  DROP TABLE IF EXISTS users;
   `)
   console.log("Tables dropped successfully!")
   // drop all tables, in the correct order
@@ -27,7 +27,7 @@ async function createTables() {
   await client.query(`
   CREATE TABLE activities(
     id SERIAL PRIMARY KEY,
-    name VARCH(255) UNIQUE NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL,
     description TEXT NOT NULL
   );
   `)
@@ -219,6 +219,7 @@ async function createInitialRoutineActivities() {
 
 async function rebuildDB() {
   try {
+    await client.connect()
     await dropTables()
     await createTables()
     await createInitialUsers()
