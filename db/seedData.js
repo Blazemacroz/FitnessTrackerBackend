@@ -4,11 +4,44 @@ const client = require("./client")
 
 async function dropTables() {
   console.log("Dropping All Tables...")
+  
   // drop all tables, in the correct order
 }
 
 async function createTables() {
   console.log("Starting to build tables...")
+  await client.query(`
+  CREATE TABLE users(
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL
+  );`)
+  console.log('created users table')
+  await client.query(`
+  CREATE TABLE activities(
+    id SERIAL PRIMARY KEY,
+    name VARCH(255) UNIQUE NOT NULL,
+    description TEXT NOT NULL
+  );
+  `)
+  await client.query(`
+  CREATE TABLE routines(
+    id SERIAL PRIMARY KEY,
+    "creatorId" INTEGER REFERENCES users(id),
+    "isPublic" BOOLEAN DEFAULT false,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    goal TEXT NOT NULL
+  );
+  `)
+  await client.query(`
+  CREATE TABLE routine_activities(
+    id SERIAL PRIMARY KEY,
+    "routineId" INTEGER REFERENCES routines(id) UNIQUE,
+    "activityId" INTEGER REFERENCES activities(id) UNIQUE,
+    duration INTEGER,
+    count INTEGER
+  );
+  `)
   // create all tables, in the correct order
 }
 
