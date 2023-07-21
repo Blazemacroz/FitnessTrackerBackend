@@ -2,27 +2,58 @@ const client = require('./client');
 
 // database functions
 async function createActivity({ name, description }) {
-  // return the new activity
-  const { rows: [activity] } = await client.query(`
+  try {
+    // return the new activity
+    const { rows: [activity] } = await client.query(`
     INSERT INTO activities(name, description)
     VALUES ($1,  $2)
     ON CONFLICT (name) DO NOTHING
     RETURNING *;
   `, [name, description]);
-  console.log("activity: ", activity);
-  return activity;
+    if (!activity) {
+      throw Error;
+    } else {
+      console.log("activity: ", activity);
+      return activity;
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function getAllActivities() {
-  // select and return an array of all activities
-  const { rows: activities } = await client.query(`
+  try {
+    // select and return an array of all activities
+    const { rows: activities } = await client.query(`
     SELECT * FROM activities;
   `);
-  console.log("all activites: ", activities);
-  return activities;
+    if (!activities) {
+      throw Error;
+    } else {
+      console.log("all activites: ", activities);
+      return activities;
+    }
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-// async function getActivityById(id) { }
+async function getActivityById(id) {
+  try {
+    const { rows: [activity] } = await client.query(`
+      SELECT * FROM activities
+      WHERE id=$1;
+    `, [id]);
+    if (!activity) {
+      throw Error;
+    } else {
+      console.log("getActivityById: ", activity);
+      return activity;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 // async function getActivityByName(name) { }
 
@@ -37,7 +68,7 @@ async function getAllActivities() {
 
 module.exports = {
   getAllActivities,
-  // getActivityById,
+  getActivityById,
   // getActivityByName,
   // attachActivitiesToRoutines,
   createActivity,
