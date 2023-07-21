@@ -1,7 +1,10 @@
 // require in the database adapter functions as you write them (createUser, createActivity...)
 // const { } = require('./');
-const client = require("./client")
-const { createUser } = require("./users.js")
+const client = require("./client");
+const { createUser } = require("./users.js");
+const { createActivity, getAllActivities } = require('./activities');
+const { createRoutine, getRoutinesWithoutActivities } = require('./routines');
+const { addActivityToRoutine } = require('./routine_activities');
 
 async function dropTables() {
   console.log("Dropping All Tables...")
@@ -31,6 +34,7 @@ async function createTables() {
     description TEXT NOT NULL
   );
   `)
+  console.log("created activities table")
   await client.query(`
   CREATE TABLE routines(
     id SERIAL PRIMARY KEY,
@@ -40,21 +44,24 @@ async function createTables() {
     goal TEXT NOT NULL
   );
   `)
+  console.log("created routines table");
   await client.query(`
   CREATE TABLE routine_activities(
     id SERIAL PRIMARY KEY,
-    "routineId" INTEGER REFERENCES routines(id) UNIQUE,
-    "activityId" INTEGER REFERENCES activities(id) UNIQUE,
+    "routineId" INTEGER REFERENCES routines(id),
+    "activityId" INTEGER REFERENCES activities(id),
     duration INTEGER,
-    count INTEGER
+    count INTEGER,
+    CONSTRAINT UC_routineActivities UNIQUE ("routineId", "activityId")
   );
   `)
+  console.log("Finished creating tables");
   // create all tables, in the correct order
 }
 
-/* 
+/*
 
-DO NOT CHANGE ANYTHING BELOW. This is default seed data, and will help you start testing, before getting to the tests. 
+DO NOT CHANGE ANYTHING BELOW. This is default seed data, and will help you start testing, before getting to the tests.
 
 */
 
