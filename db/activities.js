@@ -55,22 +55,57 @@ async function getActivityById(id) {
   }
 }
 
-// async function getActivityByName(name) { }
+async function getActivityByName(name) { 
+  try {
+    const {rows : [activity] } = await client.query(`
+    SELECT * FROM activities
+    where name=$1;
+    `, [name]);
+    if (!activity) {
+      throw Error;
+    } else {
+      console.log("getActivityByName: ", activity);
+      return activity;
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 // used as a helper inside db/routines.js
+
 // async function attachActivitiesToRoutines(routines) { }
 
-// async function updateActivity({ id, ...fields }) {
+async function updateActivity({ id, ...fields }) {
+ const setString = Object.keys(fields).map((key, index) => {
+  return `"${key}"=$${index + 1}`
+ }).join(', ');
+  try {
+    const {rows: [activity] } = await client.query(`
+    UPDATE activities
+    SET ${setString}
+    WHERE id=${id}
+    RETURNING *;
+    `, Object.values(fields));
+    if (!activity) {
+      throw Error;
+    } else {
+      console.log("updateActivity ", activity)
+      return activity;
+    }
+  } catch (err) {
+    console.error(err)
+  }
 //   // don't try to update the id
 //   // do update the name and description
 //   // return the updated activity
-// }
+}
 
 module.exports = {
   getAllActivities,
   getActivityById,
-  // getActivityByName,
+  getActivityByName,
   // attachActivitiesToRoutines,
   createActivity,
-  // updateActivity,
+  updateActivity,
 };
