@@ -40,33 +40,35 @@ async function getRoutinesWithoutActivities() {
 async function getAllRoutines() { 
 try {
   const { rows: routines } = await client.query(`
-  SELECT * FROM routines
-  JOIN routine_activities ON routines.id=routine_activities."routineId";
+  SELECT * FROM routines;
   `)
+  console.log("getAllRoutines(before)" , routines);
   if (!routines) {
     throw Error;
   } else {
-    console.log("getAllRoutines(before)" , routines);
 const activitiesPromise = routines.map( async (routine) => {
-  // const { rows: activitesReference } = await client.query(`
-  // SELECT * FROM routine_activities
-  // WHERE "routineId"=$1;
-  // `, [routine.id])
-  if (routine.routine_activities.length > 0) {
-  const { rows: routineActivities } = await client.query(`
-  SELECT * FROM activities
+  const { rows: activitesReference } = await client.query(`
+  SELECT * FROM routine_activities
   WHERE "routineId"=$1;
-  `, [routine.routine_activities[0].routineId])
-  routine.activities = routineActivities;
+  `, [routine.id])
+  if (activitesReference.length > 0) {
+    const activities = activitesReference.map( async (reference) => {
+      const { rows: routineActivities } = await client.query(`
+      SELECT * FROM activities
+      WHERE "routineId"=$1;
+      `, [reference.routineId])
+return routineActivities;
+    })
+  routine.activities = activities;
   return routine;
   } else {
     return routine
   }
 })
+const routinesWithActivities = await Promise.all(activitiesPromise);
 
-
-    console.log("getAllRoutines (after)", routines)
-    return routines;
+    console.log("getAllRoutines (after)", routinesWithActivities)
+    return routinesWithActivities;
   }
 } catch (err) {
   console.error(err)
