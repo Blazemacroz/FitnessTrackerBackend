@@ -74,7 +74,43 @@ async function getActivityByName(name) {
 
 // used as a helper inside db/routines.js
 
-// async function attachActivitiesToRoutines(routines) { }
+async function attachActivitiesToRoutines(routine) { 
+  const { rows: activitiesReference } = await client.query(`
+  SELECT * FROM routine_activities
+  WHERE id=$1;
+`, [routine.id])
+const { rows: routineActivities } = await client.query(`
+SELECT activities.id, activities.name, activities.description
+FROM activities;
+`)
+if () {
+  const newRoutines = activitiesReference.map((reference) => {
+    return routineActivities.filter((activity) => {
+      if (reference.routineId === activity.id) {
+      // This is where we left off.
+      }
+    })
+  })
+}
+// if (activitesReference.length > 0) {
+//   const activities = activitesReference.map(async (reference) => {
+//     const { rows: [routineActivity] } = await client.query(`
+//       SELECT activities.id, activities.name, activities.description
+//       FROM activities
+//       WHERE id=$1;
+// `, [reference.activityId])
+//     routineActivity.duration = reference.duration;
+//     routineActivity.count = reference.count;
+//     routineActivity.routineId = reference.routineId;
+//     routineActivity.routineActivityId = reference.id;
+//     return routineActivity;
+//   })
+//   routine.activities = await Promise.all(activities);
+//   return routine;
+// } else {
+//   return routine;
+// }
+  }
 
 async function updateActivity({ id, ...fields }) {
  const setString = Object.keys(fields).map((key, index) => {
@@ -105,7 +141,7 @@ module.exports = {
   getAllActivities,
   getActivityById,
   getActivityByName,
-  // attachActivitiesToRoutines,
+  attachActivitiesToRoutines,
   createActivity,
   updateActivity,
 };
