@@ -1,7 +1,7 @@
 const client = require("./client");
 const { getUserByUsername } = require("./users");
 const { attachActivitiesToRoutines } = require("./activities");
- 
+
 async function createRoutine({ creatorId, isPublic, name, goal }) {
   try {
     const { rows: [routine] } = await client.query(`
@@ -67,33 +67,9 @@ async function getAllRoutines() {
     if (!routines) {
       throw Error;
     } else {
-      const activitiesPromise = routines.map(async (routine) => {
-  //       const { rows: activitesReference } = await client.query(`
-  //         SELECT * FROM routine_activities
-  //         WHERE "routineId"=$1;
-  // `, [routine.id])
-  //       if (activitesReference.length > 0) {
-  //         const activities = activitesReference.map(async (reference) => {
-  //           const { rows: [routineActivity] } = await client.query(`
-  //             SELECT activities.id, activities.name, activities.description
-  //             FROM activities
-  //             WHERE id=$1;
-  //     `, [reference.activityId])
-  //           routineActivity.duration = reference.duration;
-  //           routineActivity.count = reference.count;
-  //           routineActivity.routineId = reference.routineId;
-  //           routineActivity.routineActivityId = reference.id;
-  //           return routineActivity;
-  //         })
-  //         routine.activities = await Promise.all(activities);
-  //         return routine;
-  //       } else {
-  //         return routine;
-  //       }
-  return await attachActivitiesToRoutines(routine);
-      })
-      const routinesWithActivities = await Promise.all(activitiesPromise);
-
+      const routinesWithActivities = await Promise.all(routines.map(async (routine) => {
+        return await attachActivitiesToRoutines(routine);
+      }))
       console.log("getAllRoutines (after)", routinesWithActivities)
       return routinesWithActivities;
     }
@@ -112,38 +88,15 @@ async function getAllPublicRoutines() {
     WHERE "isPublic"=true
     ;
     `)
-    console.log("getAllPublicRoutines(before): ", routines);
+    // console.log("getAllPublicRoutines(before): ", routines);
     if (!routines) {
       throw Error;
     } else {
-      const activitiesPromise = routines.map(async (routine) => {
-  //       const { rows: activitesReference } = await client.query(`
-  //         SELECT * FROM routine_activities
-  //         WHERE "routineId"=$1;
-  // `, [routine.id])
-  //       if (activitesReference.length > 0) {
-  //         const activities = activitesReference.map(async (reference) => {
-  //           const { rows: [routineActivity] } = await client.query(`
-  //             SELECT activities.id, activities.name, activities.description
-  //             FROM activities
-  //             WHERE id=$1;
-  //     `, [reference.activityId])
-  //           routineActivity.duration = reference.duration;
-  //           routineActivity.count = reference.count;
-  //           routineActivity.routineId = reference.routineId;
-  //           routineActivity.routineActivityId = reference.id;
-  //           return routineActivity;
-  //         })
-  //         routine.activities = await Promise.all(activities);
-  //         return routine;
-  //       } else {
-  //         return routine;
-  //       }
-  return await attachActivitiesToRoutines(routine);
-      })
-      const routinesWithActivities = await Promise.all(activitiesPromise);
+      const routinesWithActivities = await Promise.all(routines.map(async (routine) => {
+        return await attachActivitiesToRoutines(routine);
+      }))
 
-      console.log("getAllPublicRoutines(after): ", routinesWithActivities);
+      // console.log("getAllPublicRoutines(after): ", routinesWithActivities);
       return routinesWithActivities;
     }
   } catch (err) {
@@ -162,38 +115,15 @@ async function getAllRoutinesByUser({ username }) {
   WHERE "creatorId"=$1
   ;
   `, [user.id]);
-    console.log("getAllRoutinesByUser(before): ", routines);
+    // console.log("getAllRoutinesByUser(before): ", routines);
     if (!routines) {
       throw Error;
     } else {
-      const activitiesPromise = routines.map(async (routine) => {
-//         const { rows: activitesReference } = await client.query(`
-//         SELECT * FROM routine_activities
-//         WHERE "routineId"=$1;
-// `, [routine.id])
-//         if (activitesReference.length > 0) {
-//           const activities = activitesReference.map(async (reference) => {
-//             const { rows: [routineActivity] } = await client.query(`
-//             SELECT activities.id, activities.name, activities.description
-//             FROM activities
-//             WHERE id=$1;
-//     `, [reference.activityId])
-//             routineActivity.duration = reference.duration;
-//             routineActivity.count = reference.count;
-//             routineActivity.routineId = reference.routineId;
-//             routineActivity.routineActivityId = reference.id;
-//             return routineActivity;
-//           })
-//           routine.activities = await Promise.all(activities);
-//           return routine;
-//         } else {
-//           return routine;
-//         }
-return await attachActivitiesToRoutines(routine);
-      })
-      const routinesWithActivities = await Promise.all(activitiesPromise);
+      const routinesWithActivities = await Promise.all(routines.map(async (routine) => {
+        return await attachActivitiesToRoutines(routine);
+      }))
 
-      console.log("getAllRoutinesByUser(after): ", routinesWithActivities);
+      // console.log("getAllRoutinesByUser(after): ", routinesWithActivities);
       return routinesWithActivities;
     }
   } catch (err) {
@@ -212,38 +142,15 @@ async function getPublicRoutinesByUser({ username }) {
   WHERE "creatorId"=$1 AND "isPublic"=true
   ;
   `, [user.id]);
-    console.log("getAllRoutinesByUser(before): ", routines);
+    // console.log("getAllRoutinesByUser(before): ", routines);
     if (!routines) {
       throw Error;
     } else {
-      const activitiesPromise = routines.map(async (routine) => {
-//         const { rows: activitesReference } = await client.query(`
-//         SELECT * FROM routine_activities
-//         WHERE "routineId"=$1;
-// `, [routine.id])
-//         if (activitesReference.length > 0) {
-//           const activities = activitesReference.map(async (reference) => {
-//             const { rows: [routineActivity] } = await client.query(`
-//             SELECT activities.id, activities.name, activities.description
-//             FROM activities
-//             WHERE id=$1;
-//     `, [reference.activityId])
-//             routineActivity.duration = reference.duration;
-//             routineActivity.count = reference.count;
-//             routineActivity.routineId = reference.routineId;
-//             routineActivity.routineActivityId = reference.id;
-//             return routineActivity;
-//           })
-//           routine.activities = await Promise.all(activities);
-//           return routine;
-//         } else {
-//           return routine;
-//         }
-return await attachActivitiesToRoutines(routine);
-      })
-      const routinesWithActivities = await Promise.all(activitiesPromise);
+      const routinesWithActivities = await Promise.all(routines.map(async (routine) => {
+        return await attachActivitiesToRoutines(routine);
+      }))
 
-      console.log("getAllRoutinesByUser(after): ", routinesWithActivities);
+      // console.log("getAllRoutinesByUser(after): ", routinesWithActivities);
       return routinesWithActivities;
     }
   } catch (err) {
@@ -271,50 +178,20 @@ async function getPublicRoutinesByActivity({ id }) {
       console.log("activityRoutine: ", activityRoutine)
       if (activityRoutine !== undefined) {
         return activityRoutine;
-      } 
+      }
     })
     const routines = await Promise.all(routinesPromise);
-    const filterRoutines = routines.filter((el) => {
+    const filteredRoutines = routines.filter((el) => {
       return !!el;
     })
-    //   const { rows: routines } = await client.query(`
-    // SELECT routines.id, routines."creatorId", routines."isPublic",
-    // routines.name, routines.goal, users.username AS "creatorName"
-    // FROM routines
-    // JOIN users ON routines."creatorId"=users.id
-    // WHERE "isPublic"=true AND id=
-    // ;
-    // `, []);
-    console.log("getPublicRoutinesByActivity(before): ", filterRoutines);
+    console.log("getPublicRoutinesByActivity(before): ", filteredRoutines);
     if (!routines) {
       throw Error;
     } else {
-      const activitiesPromise = filterRoutines.map(async (routine) => {
-//         const { rows: activitesReference } = await client.query(`
-//         SELECT * FROM routine_activities
-//         WHERE "routineId"=$1;
-// `, [routine.id])
-//         if (activitesReference.length > 0) {
-//           const activities = activitesReference.map(async (reference) => {
-//             const { rows: [routineActivity] } = await client.query(`
-//             SELECT activities.id, activities.name, activities.description
-//             FROM activities
-//             WHERE id=$1;
-//     `, [reference.activityId])
-//             routineActivity.duration = reference.duration;
-//             routineActivity.count = reference.count;
-//             routineActivity.routineId = reference.routineId;
-//             routineActivity.routineActivityId = reference.id;
-//             return routineActivity;
-//           })
-//           routine.activities = await Promise.all(activities);
-//           return routine;
-//         } else {
-//           return routine;
-//         }
-return await attachActivitiesToRoutines(routine);
-      })
-      const routinesWithActivities = await Promise.all(activitiesPromise);
+
+      const routinesWithActivities = await Promise.all(filteredRoutines.map(async (routine) => {
+        return await attachActivitiesToRoutines(routine);
+      }))
 
       console.log("getPublicRoutinesByActivity(after): ", routinesWithActivities);
       return routinesWithActivities;

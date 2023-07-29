@@ -55,9 +55,9 @@ async function getActivityById(id) {
   }
 }
 
-async function getActivityByName(name) { 
+async function getActivityByName(name) {
   try {
-    const {rows : [activity] } = await client.query(`
+    const { rows: [activity] } = await client.query(`
     SELECT * FROM activities
     where name=$1;
     `, [name]);
@@ -74,50 +74,57 @@ async function getActivityByName(name) {
 
 // used as a helper inside db/routines.js
 
-async function attachActivitiesToRoutines(routine) { 
+async function attachActivitiesToRoutines(routine) {
   const { rows: activitiesReference } = await client.query(`
   SELECT * FROM routine_activities
-  WHERE id=$1;
+  WHERE "routineId"=$1;
 `, [routine.id])
-const { rows: routineActivities } = await client.query(`
+  const { rows: routineActivities } = await client.query(`
 SELECT activities.id, activities.name, activities.description
 FROM activities;
 `)
-if () {
-  const newRoutines = activitiesReference.map((reference) => {
-    return routineActivities.filter((activity) => {
-      if (reference.routineId === activity.id) {
-      // This is where we left off.
+  const newActivities = activitiesReference.map((reference) => {
+    const [result] = routineActivities.filter((activity) => {
+      if (reference.activityId === activity.id) {
+        activity.duration = reference.duration;
+        activity.count = reference.count;
+        activity.routineId = reference.routineId;
+        activity.routineActivityId = reference.id;
+        return activity;
       }
     })
+    return result;
   })
+  routine.activities = newActivities;
+  console.log("attachActivitiesToRoutines: ", routine)
+  return routine;
+
+  // if (activitesReference.length > 0) {
+  //   const activities = activitesReference.map(async (reference) => {
+  //     const { rows: [routineActivity] } = await client.query(`
+  //       SELECT activities.id, activities.name, activities.description
+  //       FROM activities
+  //       WHERE id=$1;
+  // `, [reference.activityId])
+  //     routineActivity.duration = reference.duration;
+  //     routineActivity.count = reference.count;
+  //     routineActivity.routineId = reference.routineId;
+  //     routineActivity.routineActivityId = reference.id;
+  //     return routineActivity;
+  //   })
+  //   routine.activities = await Promise.all(activities);
+  //   return routine;
+  // } else {
+  //   return routine;
+  // }
 }
-// if (activitesReference.length > 0) {
-//   const activities = activitesReference.map(async (reference) => {
-//     const { rows: [routineActivity] } = await client.query(`
-//       SELECT activities.id, activities.name, activities.description
-//       FROM activities
-//       WHERE id=$1;
-// `, [reference.activityId])
-//     routineActivity.duration = reference.duration;
-//     routineActivity.count = reference.count;
-//     routineActivity.routineId = reference.routineId;
-//     routineActivity.routineActivityId = reference.id;
-//     return routineActivity;
-//   })
-//   routine.activities = await Promise.all(activities);
-//   return routine;
-// } else {
-//   return routine;
-// }
-  }
 
 async function updateActivity({ id, ...fields }) {
- const setString = Object.keys(fields).map((key, index) => {
-  return `"${key}"=$${index + 1}`
- }).join(', ');
+  const setString = Object.keys(fields).map((key, index) => {
+    return `"${key}"=$${index + 1}`
+  }).join(', ');
   try {
-    const {rows: [activity] } = await client.query(`
+    const { rows: [activity] } = await client.query(`
     UPDATE activities
     SET ${setString}
     WHERE id=${id}
@@ -132,9 +139,9 @@ async function updateActivity({ id, ...fields }) {
   } catch (err) {
     console.error(err)
   }
-//   // don't try to update the id
-//   // do update the name and description
-//   // return the updated activity
+  //   // don't try to update the id
+  //   // do update the name and description
+  //   // return the updated activity
 }
 
 module.exports = {
