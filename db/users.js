@@ -48,12 +48,12 @@ async function getUser({ username, password }) {
     const user = await getUserByUsername(username);
     const hashedPasword = user.password;
     const passwordsMatch = await bcrypt.compare(password, hashedPasword);
-    if (passwordsMatch) {
+    if (!passwordsMatch) {
+      throw Error;
+    } else {
       delete user.password;
       console.log("getUser: ", user);
       return user;
-    } else {
-      throw Error;
     }
   } catch (err) {
     console.error(err);
