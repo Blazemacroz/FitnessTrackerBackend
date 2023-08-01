@@ -50,12 +50,26 @@ const routineActivitiesRouter = require('./routineActivities');
 router.use('/routine_activities', routineActivitiesRouter);
 
 router.use((err, req, res, next) => {
-    res.status(401)
-    res.send({
+    if (err.status === 403) {
+        res.status(403).send({
+            error: err.error,
+            message: err.message,
+            name: err.name
+        });
+    } else {
+        next(err);
+    }
+})
+
+router.use((err, req, res, next) => {
+    res.status(401).send({
         error: err.error,
         message: err.message,
         name: err.name
     })
+    next(err);
+
 })
+
 
 module.exports = router;

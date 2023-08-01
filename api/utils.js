@@ -6,7 +6,7 @@ async function requireUser(req, res, next) {
             name: "Not logged in"
         })
     }
-    next()
+    next();
 }
 module.exports = {
     requireUser
