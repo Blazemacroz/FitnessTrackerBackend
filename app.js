@@ -1,10 +1,10 @@
 require("dotenv").config()
 const express = require("express")
 const app = express()
-const PORT = process.env.PORT || 3000 
-const morgan = require('morgan') 
+// const PORT = process.env.PORT || 3000
+const morgan = require('morgan')
 const router = require('./api');
-const { client } = require('./db');
+// const { client } = require('./db');
 const cors = require('cors')
 // Setup your Middleware and API Router here
 // client.connect();
@@ -16,7 +16,8 @@ app.use(express.json())
 
 app.use("/api", router)
 
-app.use((err, req, res, next)=>{
-    console.error(err.stack)
-})
+// app.use((err, req, res, next)=>{
+//     console.error(err.stack)
+// })
+
 module.exports = app;

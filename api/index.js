@@ -3,11 +3,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const {
-    getUserById, getUser
+    getUserById
 } = require('../db')
 // GET /api/health
 router.get('/health', async (req, res, next) => {
-res.send("All is well!")
+    res.send("All is well!")
 });
 
 router.use(async (req, res, next) => {
@@ -17,20 +17,20 @@ router.use(async (req, res, next) => {
         next();
     } else if (auth.startsWith(prefix)) {
         const token = auth.slice(prefix.length);
-    try {
-        const {id} = jwt.verify(token, process.env.JWT_SECRET);
-        if (id) {
-            req.user = await getUserById(id);
-            next();
-        } else if (!id) {
-            next({
-                message: "Authorization incorrect."
-            })
+        try {
+            const { id } = jwt.verify(token, process.env.JWT_SECRET);
+            if (id) {
+                req.user = await getUserById(id);
+                next();
+            } else if (!id) {
+                next({
+                    message: "Authorization incorrect."
+                })
+            }
+        } catch ({ message }) {
+            next(message)
         }
-    } catch ({message}){ 
-        next(message)
     }
-    } 
 })
 
 // ROUTER: /api/users
