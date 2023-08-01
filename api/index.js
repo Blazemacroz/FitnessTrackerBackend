@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 // GET /api/health
-// router.get('/health', async (req, res, next) => {
-// });
+router.get('/health', async (req, res, next) => {
+res.send("All is well!")
+});
+
 
 // ROUTER: /api/users
 const usersRouter = require('./users');
@@ -21,4 +23,11 @@ router.use('/routines', routinesRouter);
 const routineActivitiesRouter = require('./routineActivities');
 router.use('/routine_activities', routineActivitiesRouter);
 
+router.use((err, req, res, next) => {
+    res.send({
+        error: err.error,
+        message: err.message,
+        name: err.name
+    })
+})
 module.exports = router;
