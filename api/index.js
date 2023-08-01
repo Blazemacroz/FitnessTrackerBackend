@@ -5,10 +5,16 @@ require("dotenv").config();
 const {
     getUserById
 } = require('../db')
+
 // GET /api/health
-router.get('/health', async (req, res, next) => {
-    res.send("All is well!")
+router.get('/health', (req, res) => {
+    res.send({ message: "All is well!" });
 });
+
+// GET /api/unknown
+router.use('/unknown', (req, res) => {
+    res.status(404).send({ message: "404 Not Found" });
+})
 
 router.use(async (req, res, next) => {
     const prefix = "Bearer ";
