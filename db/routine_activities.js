@@ -19,7 +19,7 @@ async function addActivityToRoutine({
     if (!activity) {
       throw Error;
     } else {
-      console.log("activity added to routine: ", activity);
+      // console.log("activity added to routine: ", activity);
       return activity;
     }
   } catch (err) {
@@ -36,7 +36,7 @@ async function getRoutineActivityById(id) {
     if (!routineActivity) {
       throw Error;
     } else {
-      console.log("getRoutineActivityById: ", routineActivity);
+      // console.log("getRoutineActivityById: ", routineActivity);
       return routineActivity;
     }
   } catch (err) {
@@ -53,7 +53,7 @@ async function getRoutineActivitiesByRoutine({ id }) {
     if (!routineActivities) {
       throw Error;
     } else {
-      console.log("getRoutineActivitiesByRoutine: ", routineActivities);
+      // console.log("getRoutineActivitiesByRoutine: ", routineActivities);
       return routineActivities;
     }
   } catch (err) {
@@ -75,7 +75,7 @@ async function updateRoutineActivity({ id, ...fields }) {
     if (!updatedRoutineActivity) {
       throw Error;
     } else {
-      console.log("updateRoutineActivity: ", updatedRoutineActivity);
+      // console.log("updateRoutineActivity: ", updatedRoutineActivity);
       return updatedRoutineActivity;
     }
   } catch (err) {
@@ -93,7 +93,7 @@ async function destroyRoutineActivity(id) {
     if (!routineActivity) {
       throw Error;
     } else {
-      console.log("destroyRoutineActivity: ", routineActivity);
+      // console.log("destroyRoutineActivity: ", routineActivity);
       return routineActivity;
     }
   } catch (err) {
@@ -112,7 +112,7 @@ async function canEditRoutineActivity(routineActivityId, userId) {
     if (!routine) {
       throw Error;
     } else {
-      console.log("canEditRoutineActivity: ", routine);
+      // console.log("canEditRoutineActivity: ", routine);
       if (routine.creatorId === userId) {
         return true;
       } else {

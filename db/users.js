@@ -18,7 +18,7 @@ async function createUser({ username, password }) {
       throw Error;
     } else {
       delete users.password;
-      console.log('users:', users);
+      // console.log('users:', users);
       return users;
     }
   } catch (error) {
@@ -35,7 +35,7 @@ async function getUserByUsername(userName) {
     if (!user) {
       throw Error;
     } else {
-      console.log("getUserByUsername: ", user);
+      // console.log("getUserByUsername: ", user);
       return user;
     }
   } catch (err) {
@@ -52,7 +52,7 @@ async function getUser({ username, password }) {
       throw Error;
     } else {
       delete user.password;
-      console.log("getUser: ", user);
+      // console.log("getUser: ", user);
       return user;
     }
   } catch (err) {
@@ -70,7 +70,7 @@ async function getUserById(userId) {
       throw Error;
     } else {
       delete user.password;
-      console.log("getUserById: ", user);
+      // console.log("getUserById: ", user);
       return user;
     }
   } catch (err) {

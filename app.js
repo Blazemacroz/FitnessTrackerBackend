@@ -16,8 +16,8 @@ app.use(express.json())
 
 app.use("/api", router)
 
-// app.use((err, req, res, next)=>{
-//     console.error(err.stack)
-// })
+app.get("/", (req, res) => {
+    res.send('<h1>Welcome to Fitness Tracker Backend!</h1>');
+})
 
 module.exports = app;

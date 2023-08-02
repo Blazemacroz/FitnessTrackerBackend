@@ -49,7 +49,7 @@ router.post('/', requireUser, async (req, res, next) => {
 router.patch('/:activityId', requireUser, async (req, res, next) => {
     const id = Number(req.params.activityId);
     const name = req.body.name;
-    console.log("/:activityId ", name);
+    // console.log("/:activityId ", name);
     try {
         const existingActivity = await getActivityById(id);
         const nameActivity = await getActivityByName(name);
@@ -62,7 +62,7 @@ router.patch('/:activityId', requireUser, async (req, res, next) => {
         } else if (!nameActivity) {
             const activityToUpdate = await updateActivity({ id, ...req.body });
             if (activityToUpdate) {
-                console.log(":activityId (patch) ", activityToUpdate);
+                // console.log(":activityId (patch) ", activityToUpdate);
                 res.send({
                     description: req.body.description,
                     id: id,
@@ -95,7 +95,7 @@ router.get('/:activityId/routines', async (req, res, next) => {
             });
         } else {
             const activityRoutines = await getPublicRoutinesByActivity({ id });
-            console.log("/activityId/routines ", activityRoutines);
+            // console.log("/activityId/routines ", activityRoutines);
             res.send(activityRoutines);
         }
     } catch ({ error, message, name }) {

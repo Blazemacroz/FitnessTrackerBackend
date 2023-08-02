@@ -13,7 +13,7 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
     if (!routine) {
       throw Error;
     } else {
-      console.log("routine: ", routine);
+      // console.log("routine: ", routine);
       return routine;
     }
   } catch (err) {
@@ -30,7 +30,7 @@ async function getRoutineById(id) {
     if (!routine) {
       throw Error;
     } else {
-      console.log("getRoutineById: ", routine);
+      // console.log("getRoutineById: ", routine);
       return routine;
     }
   } catch (err) {
@@ -46,7 +46,7 @@ async function getRoutinesWithoutActivities() {
     if (!routines) {
       throw Error;
     } else {
-      console.log("all routines: ", routines);
+      // console.log("all routines: ", routines);
       return routines;
     }
   } catch (err) {
@@ -63,14 +63,14 @@ async function getAllRoutines() {
   JOIN users ON routines."creatorId"=users.id
   ;
   `)
-    console.log("getAllRoutines(before)", routines);
+    // console.log("getAllRoutines(before)", routines);
     if (!routines) {
       throw Error;
     } else {
       const routinesWithActivities = await Promise.all(routines.map(async (routine) => {
         return await attachActivitiesToRoutines(routine);
       }))
-      console.log("getAllRoutines (after)", routinesWithActivities)
+      // console.log("getAllRoutines (after)", routinesWithActivities)
       return routinesWithActivities;
     }
   } catch (err) {
@@ -115,7 +115,7 @@ async function getAllRoutinesByUser({ username }) {
   WHERE "creatorId"=$1
   ;
   `, [user.id]);
-    console.log("getAllRoutinesByUser(before): ", routines);
+    // console.log("getAllRoutinesByUser(before): ", routines);
     if (!routines) {
       throw Error;
     } else {
@@ -123,7 +123,7 @@ async function getAllRoutinesByUser({ username }) {
         return await attachActivitiesToRoutines(routine);
       }))
 
-      console.log("getAllRoutinesByUser(after): ", routinesWithActivities);
+      // console.log("getAllRoutinesByUser(after): ", routinesWithActivities);
       return routinesWithActivities;
     }
   } catch (err) {
@@ -142,7 +142,7 @@ async function getPublicRoutinesByUser({ username }) {
   WHERE "creatorId"=$1 AND "isPublic"=true
   ;
   `, [user.id]);
-    console.log("getAllPublicRoutinesByUser(before): ", routines);
+    // console.log("getAllPublicRoutinesByUser(before): ", routines);
     if (!routines) {
       throw Error;
     } else {
@@ -150,7 +150,7 @@ async function getPublicRoutinesByUser({ username }) {
         return await attachActivitiesToRoutines(routine);
       }))
 
-      console.log("getAllPublicRoutinesByUser(after): ", routinesWithActivities);
+      // console.log("getAllPublicRoutinesByUser(after): ", routinesWithActivities);
       return routinesWithActivities;
     }
   } catch (err) {
@@ -164,9 +164,9 @@ async function getPublicRoutinesByActivity({ id }) {
       SELECT "routineId" FROM routine_activities
       WHERE "activityId"=$1;
     `, [id]);
-    console.log("getPublicRoutinesByActivity - references: ", references);
+    // console.log("getPublicRoutinesByActivity - references: ", references);
     const routinesPromise = references.map(async (reference) => {
-      console.log("rouineId: ", reference.routineId);
+      // console.log("rouineId: ", reference.routineId);
       const { rows: [activityRoutine] } = await client.query(`
   SELECT routines.id, routines."creatorId", routines."isPublic",
   routines.name, routines.goal, users.username AS "creatorName"
@@ -175,7 +175,7 @@ async function getPublicRoutinesByActivity({ id }) {
   WHERE routines.id=$1 AND "isPublic"=true
   ;
   `, [reference.routineId]);
-      console.log("activityRoutine: ", activityRoutine)
+      // console.log("activityRoutine: ", activityRoutine)
       if (activityRoutine !== undefined) {
         return activityRoutine;
       }
@@ -184,7 +184,7 @@ async function getPublicRoutinesByActivity({ id }) {
     const filteredRoutines = routines.filter((el) => {
       return !!el;
     })
-    console.log("getPublicRoutinesByActivity(before): ", filteredRoutines);
+    // console.log("getPublicRoutinesByActivity(before): ", filteredRoutines);
     if (!routines) {
       throw Error;
     } else {
@@ -193,7 +193,7 @@ async function getPublicRoutinesByActivity({ id }) {
         return await attachActivitiesToRoutines(routine);
       }))
 
-      console.log("getPublicRoutinesByActivity(after): ", routinesWithActivities);
+      // console.log("getPublicRoutinesByActivity(after): ", routinesWithActivities);
       return routinesWithActivities;
     }
   } catch (err) {
@@ -238,7 +238,7 @@ async function destroyRoutine(id) {
     if (!routine) {
       throw Error;
     } else {
-      console.log("destroyRoutine: ", routine);
+      // console.log("destroyRoutine: ", routine);
       return routine;
     }
   } catch (err) {

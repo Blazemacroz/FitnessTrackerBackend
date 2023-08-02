@@ -47,7 +47,7 @@ router.patch('/:routineId', requireUser, async (req, res, next) => {
     const userId = req.user.id;
     try {
         const userRoutine = await getRoutineById(id);
-        console.log("/routineId (user id) ", userId, userRoutine.creatorId);
+        // console.log("/routineId (user id) ", userId, userRoutine.creatorId);
         if (userRoutine.creatorId === userId) {
             const updatedRoutine = await updateRoutine({ id, ...req.body })
             res.send(updatedRoutine);

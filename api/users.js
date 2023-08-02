@@ -110,7 +110,7 @@ router.get('/me', requireUser, async (req, res, next) => {
 router.get('/:username/routines', requireUser, async (req, res, next) => {
     const username = req.params.username;
     const user = req.user;
-    console.log("req.user", req.user);
+    // console.log("req.user", req.user);
     try {
         const userRoutines = await getAllRoutinesByUser(user);
         const publicRoutines = await getPublicRoutinesByUser({ username });

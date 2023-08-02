@@ -13,7 +13,7 @@ async function createActivity({ name, description }) {
     if (!activity) {
       throw Error;
     } else {
-      console.log("activity: ", activity);
+      // console.log("activity: ", activity);
       return activity;
     }
   } catch (err) {
@@ -30,7 +30,7 @@ async function getAllActivities() {
     if (!activities) {
       throw Error;
     } else {
-      console.log("all activites: ", activities);
+      // console.log("all activites: ", activities);
       return activities;
     }
   } catch (err) {
@@ -47,7 +47,7 @@ async function getActivityById(id) {
     if (!activity) {
       throw Error;
     } else {
-      console.log("getActivityById: ", activity);
+      // console.log("getActivityById: ", activity);
       return activity;
     }
   } catch (err) {
@@ -64,7 +64,7 @@ async function getActivityByName(name) {
     if (!activity) {
       throw Error;
     } else {
-      console.log("getActivityByName: ", activity);
+      // console.log("getActivityByName: ", activity);
       return activity;
     }
   } catch (err) {
@@ -96,30 +96,14 @@ FROM activities;
     return result;
   })
   routine.activities = newActivities;
-  console.log("attachActivitiesToRoutines: ", routine)
+  // console.log("attachActivitiesToRoutines: ", routine)
   return routine;
-
-  // if (activitesReference.length > 0) {
-  //   const activities = activitesReference.map(async (reference) => {
-  //     const { rows: [routineActivity] } = await client.query(`
-  //       SELECT activities.id, activities.name, activities.description
-  //       FROM activities
-  //       WHERE id=$1;
-  // `, [reference.activityId])
-  //     routineActivity.duration = reference.duration;
-  //     routineActivity.count = reference.count;
-  //     routineActivity.routineId = reference.routineId;
-  //     routineActivity.routineActivityId = reference.id;
-  //     return routineActivity;
-  //   })
-  //   routine.activities = await Promise.all(activities);
-  //   return routine;
-  // } else {
-  //   return routine;
-  // }
 }
 
 async function updateActivity({ id, ...fields }) {
+  //   // don't try to update the id
+  //   // do update the name and description
+  //   // return the updated activity
   const setString = Object.keys(fields).map((key, index) => {
     return `"${key}"=$${index + 1}`
   }).join(', ');
@@ -133,15 +117,12 @@ async function updateActivity({ id, ...fields }) {
     if (!activity) {
       throw Error;
     } else {
-      console.log("updateActivity ", activity)
+      // console.log("updateActivity ", activity)
       return activity;
     }
   } catch (err) {
     console.error(err)
   }
-  //   // don't try to update the id
-  //   // do update the name and description
-  //   // return the updated activity
 }
 
 module.exports = {
